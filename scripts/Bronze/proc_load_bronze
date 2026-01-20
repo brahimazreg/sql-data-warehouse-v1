@@ -97,13 +97,13 @@ BEGIN
 		PRINT '             bronze.erp_loc_a101'
 		PRINT '==========================================================='
 		SET @start_time=GETDATE()
-		TRUNCATE   table bronze.erp_loc_a101;
+		TRUNCATE TABLE bronze.erp_loc_a101;		
 		BULK INSERT bronze.erp_loc_a101
-		FROM 'C:\source_erp\CUST_AZ12.csv'
+		FROM 'C:\DataWarehouseProject\source_erp\Localite.csv'
 		WITH (
-			FIRSTROW =2,
-			FIELDTERMINATOR=','
-
+			FIRSTROW = 2,
+			FIELDTERMINATOR = ','
+			
 		)
 		SET @end_time=GETDATE()
 
@@ -119,13 +119,13 @@ BEGIN
 		PRINT '             bronze.erp_px_cat_g1v2'
 		PRINT '==========================================================='
 		SET @start_time=GETDATE()
-		TRUNCATE   table bronze.erp_px_cat_g1v2;
+		TRUNCATE TABLE bronze.erp_px_cat_g1v2;		
 		BULK INSERT bronze.erp_px_cat_g1v2
-		FROM 'C:\source_erp\PX_CAT_G1V2.csv'
+		FROM 'C:\DataWarehouseProject\source_erp\Category.csv'
 		WITH (
-			FIRSTROW =2 ,
-			FIELDTERMINATOR=','
-			)
+			FIRSTROW = 2,
+			FIELDTERMINATOR = ','
+		);
 		SET @end_time=GETDATE()
 
 		PRINT 'duration of loading is  : '  +  CAST( DATEDIFF(second,@start_time,@end_time ) as nvarchar) + '  seconds'
@@ -140,14 +140,14 @@ BEGIN
         PRINT '             bronze.erp_loc_a101'
 		PRINT '==========================================================='
 		SET @start_time=GETDATE()
-		TRUNCATE   table bronze.erp_loc_a101;
-		BULK INSERT bronze.erp_loc_a101
-		FROM 'C:\source_erp\LOC_A101.csv'
+		TRUNCATE TABLE bronze.erp_cust_az12;		
+		BULK INSERT bronze.erp_cust_az12
+		FROM 'C:\DataWarehouseProject\source_erp\Customer_info.csv'
 		WITH (
-
-			FIRSTROW=2,
-			FIELDTERMINATOR=','
-		)
+			FIRSTROW = 2,
+			FIELDTERMINATOR = ','
+			
+		);
 		SET @end_time=GETDATE()
 
 		PRINT 'duration of loading is  : '  +  CAST( DATEDIFF(second,@start_time,@end_time ) as nvarchar) + '  seconds'

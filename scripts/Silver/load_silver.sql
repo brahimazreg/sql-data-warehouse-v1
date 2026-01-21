@@ -116,3 +116,19 @@ SELECT prd_id,
       END AS gen
 		  
   from bronze.erp_cust_az12
+-- Load  silver.erp_loc_a101
+  INSERT INTO silver.erp_loc_a101(cid,cntry )
+
+  SELECT REPLACE( cid ,'-','') as cid, 
+       CASE 
+      WHEN UPPER(TRIM(cntry)) in ('DE','GERMANY') THEN 'Germany'
+	  WHEN UPPER(TRIM(cntry)) in ('US','USA','UNITED STATES') THEN 'United States'
+	  WHEN UPPER(TRIM(cntry)) in ('AUSTRALIA') THEN 'Australia'
+	  WHEN UPPER(TRIM(cntry)) in ('FR','FRANCE') THEN 'France'
+	  WHEN UPPER(TRIM(cntry)) in ('CANADA') THEN 'Canada'
+	  WHEN UPPER(TRIM(cntry)) in ('UNITED KINGDOM') THEN 'United Kingdom'
+	  WHEN UPPER(TRIM(cntry))='' or cntry IS NULL THEN 'n/a'
+	  ELSE TRIM(cntry)
+    END as cntry
+
+  FROM bronze.erp_loc_a101

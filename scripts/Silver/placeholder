@@ -1,3 +1,4 @@
+--    Cleaning bronze.crm_cust_info 
 -- check for nulls or duplicates in primary key
 -- expectation no result
 
@@ -18,7 +19,7 @@ where  cst_lastname != trim(cst_lastname)
 -- check for unwanted spaces for gender
 -- expectation no result
 select cst_gndr from bronze.crm_cust_info where cst_gndr != trim(cst_gndr)
---************
+-- Remove duplicate key 
 select * from (
 select *,ROW_NUMBER() over(partition by cst_id order by cst_create_date desc  )  as flag_last 
 from bronze.crm_cust_info ) t where flag_last=1

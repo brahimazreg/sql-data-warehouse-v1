@@ -1,5 +1,7 @@
--- load into silver.crm_cust_info table 
---****************************************
+PRINT '**************************************************'
+PRINT '  Truncate table : silver.crm_cust_info  '
+TRUNCATE TABLE  silver.crm_cust_info ;
+PRINT '  insert data  into : silver.crm_cust_info  '
 INSERT INTO silver.crm_cust_info ( 
 	cst_id,
 	cst_key,
@@ -29,8 +31,13 @@ from (
 select * , ROW_NUMBER() over (PARTITION BY cst_id ORDER BY cst_create_date desc) as flag_last from bronze.crm_cust_info ) t 
 where flag_last = 1 and cst_id is not null
 Go
--- load into silver.crm_prd_info table 
-  --*************************************
+
+PRINT '**************************************************'
+PRINT '  Truncate table : silver.crm_prd_info  '
+TRUNCATE TABLE  silver.crm_cust_info ;
+PRINT '  insert data  into : silver.crm_prd_info '
+
+
 INSERT INTO silver.crm_prd_info (
 		prd_id,
 		cat_id,
@@ -57,6 +64,11 @@ SELECT prd_id,
        CAST(prd_start_dt AS DATE) AS prd_start_dt, 
 	   CAST(LEAD(prd_start_dt) OVER(PARTITION BY prd_key ORDER BY prd_start_dt )-1 AS DATE) as prd_end_dt
   FROM bronze.crm_prd_info
+
+PRINT '**************************************************'
+PRINT '  Truncate table : silver.crm_sales_details '
+TRUNCATE TABLE  silver.crm_sales_details ;
+PRINT '  insert data  into : silver.crm_sales_details '
   ---  load silver.crm_sales_details
  INSERT INTO silver.crm_sales_details (  
       sls_ord_num,
@@ -94,7 +106,13 @@ SELECT prd_id,
 	  END as sls_price
   FROM bronze.crm_sales_details
 
- --  load erp.silver_cust_az12
+PRINT '**************************************************'
+PRINT '  Truncate table : silver.erp_cust_az12 '
+TRUNCATE TABLE  silver.erp_cust_az12 ;
+PRINT '  insert data  into : silver.erp_cust_az12 '
+
+
+
   INSERT INTO silver.erp_cust_az12 (  
 		cid,
 		bdate,
@@ -116,7 +134,12 @@ SELECT prd_id,
       END AS gen
 		  
   from bronze.erp_cust_az12
--- Load  silver.erp_loc_a101
+
+PRINT '**************************************************'
+PRINT '  Truncate table : silver.erp_loc_a101 '
+TRUNCATE TABLE  silver.erp_loc_a101 ;
+PRINT '  insert data  into : silver.erp_loc_a101 '
+
   INSERT INTO silver.erp_loc_a101(cid,cntry )
 
   SELECT REPLACE( cid ,'-','') as cid, 
@@ -133,8 +156,11 @@ SELECT prd_id,
 
   FROM bronze.erp_loc_a101
 
+PRINT '**************************************************'
+PRINT '  Truncate table : silver.erp_px_cat_g1v2 '
+TRUNCATE TABLE  silver.erp_px_cat_g1v2 ;
+PRINT '  insert data  into : silver.erp_px_cat_g1v2 '
 
--- Load silver.erp_px_cat_g1v2
 INSERT INTO silver.erp_px_cat_g1v2 (id,cat,subcat,maintenance)
   SELECT id
       ,cat

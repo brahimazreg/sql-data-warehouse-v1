@@ -23,3 +23,17 @@ select cst_gndr from bronze.crm_cust_info where cst_gndr != trim(cst_gndr)
 select * from (
 select *,ROW_NUMBER() over(partition by cst_id order by cst_create_date desc  )  as flag_last 
 from bronze.crm_cust_info ) t where flag_last=1
+
+-- check if all cid from erp_cust are in silver.crm_cust_info
+  SELECT cid ,
+         CASE WHEN cid LIKE 'NAS%' THEN 
+			SUBSTRING (cid,4,LEN(cid) ) 
+			ELSE cid
+		END cid ,
+           bdate,
+		   gen
+  from bronze.erp_cust_az12
+  WHERE CASE WHEN cid LIKE 'NAS%' THEN 
+			SUBSTRING (cid,4,LEN(cid) ) 
+			ELSE cid
+		END not in (select distinct cst_key from silver.crm_cust_info)
